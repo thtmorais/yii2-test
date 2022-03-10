@@ -9,7 +9,6 @@ use yii\helpers\ArrayHelper;
 ?>
 <?= '<?php' ?>
 
-<?= PHP_EOL ?>
 
 namespace <?= $generator->namespace ?>;
 
@@ -41,3 +40,4 @@ class <?= $name ?> extends \Codeception\Test\Unit
         <?php endforeach; ?>
     }
 }
+
