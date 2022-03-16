@@ -10,29 +10,31 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\db\BaseActiveRecord;
 use yii\helpers\StringHelper;
-use yii\validators\BooleanValidator;
-use yii\validators\CompareValidator;
+use yii\validators\IpValidator;
+use yii\validators\UrlValidator;
+use yii\validators\SafeValidator;
+use yii\validators\FileValidator;
 use yii\validators\DateValidator;
-use yii\validators\DefaultValueValidator;
 use yii\validators\EachValidator;
 use yii\validators\EmailValidator;
 use yii\validators\ExistValidator;
-use yii\validators\FileValidator;
-use yii\validators\FilterValidator;
 use yii\validators\ImageValidator;
-use yii\validators\InlineValidator;
-use yii\validators\IpValidator;
-use yii\validators\NumberValidator;
 use yii\validators\RangeValidator;
-use yii\validators\RegularExpressionValidator;
-use yii\validators\RequiredValidator;
-use yii\validators\SafeValidator;
+use yii\validators\FilterValidator;
+use yii\validators\InlineValidator;
+use yii\validators\NumberValidator;
 use yii\validators\StringValidator;
 use yii\validators\UniqueValidator;
-use yii\validators\UrlValidator;
+use yii\validators\BooleanValidator;
+use yii\validators\CompareValidator;
+use yii\validators\RequiredValidator;
+use yii\validators\DefaultValueValidator;
+use yii\validators\RegularExpressionValidator;
+
 
 /**
- *
+ * Class Generator
+ * @package thtmorais\test\unit
  */
 class Generator extends \yii\gii\Generator
 {
@@ -98,7 +100,7 @@ class Generator extends \yii\gii\Generator
     {
         return ArrayHelper::merge(parent::rules(), [
             [['name', 'modelClass', 'namespace', 'testQty'], 'required'],
-            [['testQty'], 'integer'],
+            [['testQty'], 'integer', 'min' => 1],
             [['modelClass'], function ($attribute, $param, $validator){
                 $modelClass = $this->$attribute;
                 try {
@@ -189,7 +191,12 @@ class Generator extends \yii\gii\Generator
                         $assertFalse = [];
 
                         for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->email();
+                            if ($validator->allowName){
+                                $assertTrue[] = $faker->safeEmail();
+                                $assertTrue[] = $faker->name() . ' <' . $faker->safeEmail() . '>';
+                            } else {
+                                $assertTrue[] = $faker->safeEmail();
+                            }
                             $assertFalse[] = $faker->text();
                         }
 
@@ -219,7 +226,20 @@ class Generator extends \yii\gii\Generator
                         $assertFalse = [];
 
                         for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->randomNumber();
+                            if ($validator->min || $validator->max) {
+                                if ($validator->integerOnly) {
+                                    $assertTrue[] = $faker->numberBetween($validator->min, $validator->max);
+                                } else {
+                                    $assertTrue[] = $faker->randomFloat(null, $validator->min, $validator->max);
+                                }
+                            } else {
+                                if ($validator->integerOnly) {
+                                    $assertTrue[] = $faker->randomNumber();
+                                } else {
+                                    $assertTrue[] = $faker->randomFloat();
+                                }
+                            }
+
                             $assertFalse[] = $faker->text();
                         }
 
@@ -237,15 +257,34 @@ class Generator extends \yii\gii\Generator
                     break;
                 case RequiredValidator::class:
                     foreach ($validators->attributes as $attribute){
+                        $assertTrue = [];
+                        $assertFalse = [];
+
+                        for ($i = 0; $i < $this->testQty; $i++) {}
+
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertFalse' => [
-                               null
-                            ]
+                            'assertTrue' => $assertTrue,
+                            'assertFalse' => $assertFalse
                         ];
                     }
                     break;
                 case SafeValidator::class:
+                    foreach ($validator->attributes as $attribute){
+                        $assertTrue = [];
+                        $assertFalse = [];
+
+                        for ($i = 0; $i < $this->testQty; $i++) {
+                            $assertTrue[] = $faker->randomElement([$faker->randomNumber(), $faker->randomFloat(), $faker->randomAscii(), $faker->randomDigit(), $faker->randomHtml(), $faker->randomLetter()]);
+                        }
+
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => $assertTrue,
+                            'assertFalse' => $assertFalse
+                        ];
+                    }
+
                     break;
                 case StringValidator::class:
                     foreach ($validator->attributes as $attribute) {
@@ -253,8 +292,24 @@ class Generator extends \yii\gii\Generator
                         $assertFalse = [];
 
                         for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->text();
-                            $assertFalse[] = $faker->numberBetween();
+                            if ($validator->min || $validator->max){
+                                $min = $validator->min;
+                                $max = $validator->max;
+
+                                if (!$min){
+                                    $min = intdiv($max, 2);
+                                }
+
+                                if (!$max){
+                                    $max = $min * 2;
+                                }
+
+                                $assertTrue[] = $faker->realTextBetween($min, $max);
+                            } else {
+                                $assertTrue[] = $faker->realText();
+
+                            }
+                            $assertFalse[] = $faker->randomNumber();
                         }
 
                         $tests[] = [
@@ -296,5 +351,13 @@ class Generator extends \yii\gii\Generator
         ]));
 
         return $files;
+    }
+
+    /**
+     * @param $var
+     * @return bool
+     */
+    private function is_closure($var) {
+        return $var instanceof \Closure;
     }
 }
