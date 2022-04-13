@@ -143,63 +143,16 @@ class Generator extends \yii\gii\Generator
         foreach ($validators as $validator){
             switch (get_class($validator)) {
                 case BooleanValidator::class:
-                    $assertTrue = [];
-                    $assertFalse = [];
-
-                    for ($i = 0; $i < $this->testQty; $i++) {
-                        $assertTrue[] = $faker->boolean();
-                        $assertFalse[] = $faker->text();
-                    }
-
-                    foreach ($validator->attributes as $attribute) {
-                        $tests[] = [
-                            'attribute' => $attribute,
-                            'assertTrue' => $assertTrue,
-                            'assertFalse' => $assertFalse
-                        ];
-                    }
-
                     break;
                 case CompareValidator::class:
                     break;
                 case DateValidator::class:
-                    foreach ($validator->attributes as $attribute) {
-                        $assertTrue = [];
-                        $assertFalse = [];
-
-                        for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->date();
-                            $assertFalse[] = $faker->text();
-                        }
-
-                        $tests[] = [
-                            'attribute' => $attribute,
-                            'assertTrue' => $assertTrue,
-                            'assertFalse' => $assertFalse
-                        ];
-                    }
                     break;
                 case DefaultValueValidator::class:
                     break;
                 case EachValidator::class:
                     break;
                 case EmailValidator::class:
-                    foreach ($validator->attributes as $attribute) {
-                        $assertTrue = [];
-                        $assertFalse = [];
-
-                        for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->email();
-                            $assertFalse[] = $faker->text();
-                        }
-
-                        $tests[] = [
-                            'attribute' => $attribute,
-                            'assertTrue' => $assertTrue,
-                            'assertFalse' => $assertFalse
-                        ];
-                    }
-
                     break;
                 case ExistValidator::class:
                     break;
@@ -214,76 +167,20 @@ class Generator extends \yii\gii\Generator
                 case IpValidator::class:
                     break;
                 case NumberValidator::class:
-                    foreach ($validator->attributes as $attribute) {
-                        $assertTrue = [];
-                        $assertFalse = [];
-
-                        for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->randomNumber();
-                            $assertFalse[] = $faker->text();
-                        }
-
-                        $tests[] = [
-                            'attribute' => $attribute,
-                            'assertTrue' => $assertTrue,
-                            'assertFalse' => $assertFalse
-                        ];
-                    }
-
                     break;
                 case RangeValidator::class:
                     break;
                 case RegularExpressionValidator::class:
                     break;
                 case RequiredValidator::class:
-                    foreach ($validators->attributes as $attribute){
-                        $tests[] = [
-                            'attribute' => $attribute,
-                            'assertFalse' => [
-                               null
-                            ]
-                        ];
-                    }
                     break;
                 case SafeValidator::class:
                     break;
                 case StringValidator::class:
-                    foreach ($validator->attributes as $attribute) {
-                        $assertTrue = [];
-                        $assertFalse = [];
-
-                        for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->text();
-                            $assertFalse[] = $faker->numberBetween();
-                        }
-
-                        $tests[] = [
-                            'attribute' => $attribute,
-                            'assertTrue' => $assertTrue,
-                            'assertFalse' => $assertFalse
-                        ];
-                    }
-
                     break;
                 case UniqueValidator::class:
                     break;
                 case UrlValidator::class:
-                    foreach ($validator->attributes as $attribute) {
-                        $assertTrue = [];
-                        $assertFalse = [];
-
-                        for ($i = 0; $i < $this->testQty; $i++) {
-                            $assertTrue[] = $faker->url();
-                            $assertFalse[] = $faker->text();
-                        }
-
-                        $tests[] = [
-                            'attribute' => $attribute,
-                            'assertTrue' => $assertTrue,
-                            'assertFalse' => $assertFalse
-                        ];
-                    }
-
                     break;
                 default:
                     break;
