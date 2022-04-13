@@ -3,36 +3,56 @@
 namespace thtmorais\test\unit;
 
 use Yii;
-use Faker\Factory;
 use yii\base\Model;
 use yii\gii\CodeFile;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\db\BaseActiveRecord;
 use yii\helpers\StringHelper;
-use yii\validators\BooleanValidator;
-use yii\validators\CompareValidator;
+use yii\validators\IpValidator;
+use yii\validators\UrlValidator;
+use yii\validators\SafeValidator;
+use yii\validators\FileValidator;
 use yii\validators\DateValidator;
-use yii\validators\DefaultValueValidator;
 use yii\validators\EachValidator;
 use yii\validators\EmailValidator;
 use yii\validators\ExistValidator;
-use yii\validators\FileValidator;
-use yii\validators\FilterValidator;
 use yii\validators\ImageValidator;
-use yii\validators\InlineValidator;
-use yii\validators\IpValidator;
-use yii\validators\NumberValidator;
 use yii\validators\RangeValidator;
-use yii\validators\RegularExpressionValidator;
-use yii\validators\RequiredValidator;
-use yii\validators\SafeValidator;
+use yii\validators\FilterValidator;
+use yii\validators\InlineValidator;
+use yii\validators\NumberValidator;
 use yii\validators\StringValidator;
 use yii\validators\UniqueValidator;
-use yii\validators\UrlValidator;
+use yii\validators\BooleanValidator;
+use yii\validators\CompareValidator;
+use yii\validators\RequiredValidator;
+use yii\validators\DefaultValueValidator;
+use yii\validators\RegularExpressionValidator;
+use thtmorais\test\unit\validators\IpValidator as IpValidatorGenerator;
+use thtmorais\test\unit\validators\UrlValidator as UrlValidatorGenerator;
+use thtmorais\test\unit\validators\SafeValidator as SafeValidatorGenerator;
+use thtmorais\test\unit\validators\FileValidator as FileValidatorGenerator;
+use thtmorais\test\unit\validators\DateValidator as DateValidatorGenerator;
+use thtmorais\test\unit\validators\EachValidator as EachValidatorGenerator;
+use thtmorais\test\unit\validators\EmailValidator as EmailValidatorGenerator;
+use thtmorais\test\unit\validators\ExistValidator as ExistValidatorGenerator;
+use thtmorais\test\unit\validators\ImageValidator as ImageValidatorGenerator;
+use thtmorais\test\unit\validators\RangeValidator as RangeValidatorGenerator;
+use thtmorais\test\unit\validators\FilterValidator as FilterValidatorGenerator;
+use thtmorais\test\unit\validators\InlineValidator as InlineValidatorGenerator;
+use thtmorais\test\unit\validators\NumberValidator as NumberValidatorGenerator;
+use thtmorais\test\unit\validators\StringValidator as StringValidatorGenerator;
+use thtmorais\test\unit\validators\UniqueValidator as UniqueValidatorGenerator;
+use thtmorais\test\unit\validators\BooleanValidator as BooleanValidatorGenerator;
+use thtmorais\test\unit\validators\CompareValidator as CompareValidatorGenerator;
+use thtmorais\test\unit\validators\RequiredValidator as RequiredValidatorGenerator;
+use thtmorais\test\unit\validators\DefaultValueValidator as DefaultValueValidatorGenerator;
+use thtmorais\test\unit\validators\RegularExpressionValidator as RegularExpressionValidatorGenerator;
 
 /**
- *
+ * Class Generator
+ * @package thtmorais\test\unit
  */
 class Generator extends \yii\gii\Generator
 {
@@ -131,8 +151,6 @@ class Generator extends \yii\gii\Generator
             $name = $name . 'Test';
         }
 
-        $faker = Factory::create();
-
         /* @var $modelClass ActiveRecord|Model */
         $modelClass = new $this->modelClass();
 
@@ -143,44 +161,204 @@ class Generator extends \yii\gii\Generator
         foreach ($validators as $validator){
             switch (get_class($validator)) {
                 case BooleanValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => BooleanValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => BooleanValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case CompareValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => CompareValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => CompareValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case DateValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => DateValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => DateValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case DefaultValueValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => DefaultValueValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => DefaultValueValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case EachValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => EachValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => EachValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case EmailValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => EmailValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => EmailValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case ExistValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => ExistValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => ExistValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case FileValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => FileValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => FileValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case FilterValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => FilterValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => FilterValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case ImageValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => ImageValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => ImageValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case InlineValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => InlineValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => InlineValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case IpValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => IpValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => IpValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case NumberValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => NumberValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => NumberValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case RangeValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => RangeValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => RangeValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case RegularExpressionValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => RegularExpressionValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => RegularExpressionValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case RequiredValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => RequiredValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => RequiredValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case SafeValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => SafeValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => SafeValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case StringValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => StringValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => StringValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case UniqueValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => UniqueValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => UniqueValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 case UrlValidator::class:
+                    foreach ($validator->attributes as $attribute) {
+                        $tests[] = [
+                            'attribute' => $attribute,
+                            'assertTrue' => UrlValidatorGenerator::assertTrue($this->testQty),
+                            'assertFalse' => UrlValidatorGenerator::assertFalse($this->testQty)
+                        ];
+                    }
+
                     break;
                 default:
                     break;
