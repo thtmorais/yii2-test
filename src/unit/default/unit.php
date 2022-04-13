@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\ArrayHelper;
+use yii\helpers\StringHelper;
 
 /* @var $generator \thtmorais\test\unit\Generator */
 /* @var $name string */
@@ -21,19 +22,22 @@ class <?= $name ?> extends \Codeception\Test\Unit
     */
     protected UnitTester $tester;
 
-    public function TestValidate<?= $name ?>()
+    public function testValidate<?= $name ?>()
     {
-        $<?= strtolower($name) ?> = new <?= $generator->modelClass ?>();
+        <?php if (!StringHelper::startsWith($generator->modelClass,'\\', true)) : ?>
+            $<?= strtolower($name) ?> = new \<?= $generator->modelClass ?>();
+        <?php else : ?>
+            $<?= strtolower($name) ?> = new <?= $generator->modelClass ?>();
+        <?php endif; ?>
 
         <?php foreach ($tests as $test) : ?>
             /* <?= ArrayHelper::getValue($test, 'attribute') ?> */
             <?php foreach (ArrayHelper::getValue($test,'assertTrue') as $assertTrue) : ?>
-                $<?= strtolower($name) ?>->setAttribute('<?= ArrayHelper::getValue($test, 'attribute') ?>', '<?= $assertTrue ?>');
+                $<?= strtolower($name) ?>->setAttributes(['<?= ArrayHelper::getValue($test, 'attribute') ?>' => '<?= $assertTrue ?>']);
                 $this->assertTrue($<?= strtolower($name) ?>->validate(['<?= ArrayHelper::getValue($test, 'attribute') ?>']));
             <?php endforeach; ?>
-
             <?php foreach (ArrayHelper::getValue($test,'assertFalse') as $assertFalse) : ?>
-                $<?= strtolower($name) ?>->setAttribute('<?= ArrayHelper::getValue($test, 'attribute') ?>', '<?= $assertFalse ?>');
+                $<?= strtolower($name) ?>->setAttributes(['<?= ArrayHelper::getValue($test, 'attribute') ?>' => '<?= $assertFalse ?>']);
                 $this->assertFalse($<?= strtolower($name) ?>->validate(['<?= ArrayHelper::getValue($test, 'attribute') ?>']));
             <?php endforeach; ?>
             /* <?= ArrayHelper::getValue($test, 'attribute') ?> */

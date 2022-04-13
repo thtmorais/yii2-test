@@ -1,6 +1,6 @@
 <?php
 
-namespace thtmorais\test\tests\models;
+namespace thtmorais\test\unit\tests\models;
 
 use yii\helpers\ArrayHelper;
 
@@ -52,13 +52,18 @@ class Model extends \yii\base\Model
 
     public $unique;
 
-    public $url;
+    public $url, $url2, $url3, $url4;
 
     /**
      * {@inheritDoc}
      */
     public function rules()
     {
-        return ArrayHelper::merge(parent::rules(), []);
+        return ArrayHelper::merge(parent::rules(), [
+            [['url'], 'url'],
+            [['url2'], 'url', 'validSchemes' => ['http', 'https', 'ftp']],
+            [['url3'], 'url', 'defaultScheme' => 'https'],
+            [['url4'], 'url', 'enableIDN' => true],
+        ]);
     }
 }

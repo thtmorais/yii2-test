@@ -15,6 +15,7 @@
         }
     ],
     "require": {
+        "ext-intl": "*",
         "yiisoft/yii2": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0"
     },

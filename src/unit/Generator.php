@@ -29,26 +29,26 @@ use yii\validators\CompareValidator;
 use yii\validators\RequiredValidator;
 use yii\validators\DefaultValueValidator;
 use yii\validators\RegularExpressionValidator;
-use thtmorais\test\unit\validators\IpValidator as IpValidatorGenerator;
-use thtmorais\test\unit\validators\UrlValidator as UrlValidatorGenerator;
-use thtmorais\test\unit\validators\SafeValidator as SafeValidatorGenerator;
-use thtmorais\test\unit\validators\FileValidator as FileValidatorGenerator;
-use thtmorais\test\unit\validators\DateValidator as DateValidatorGenerator;
-use thtmorais\test\unit\validators\EachValidator as EachValidatorGenerator;
-use thtmorais\test\unit\validators\EmailValidator as EmailValidatorGenerator;
-use thtmorais\test\unit\validators\ExistValidator as ExistValidatorGenerator;
-use thtmorais\test\unit\validators\ImageValidator as ImageValidatorGenerator;
-use thtmorais\test\unit\validators\RangeValidator as RangeValidatorGenerator;
-use thtmorais\test\unit\validators\FilterValidator as FilterValidatorGenerator;
-use thtmorais\test\unit\validators\InlineValidator as InlineValidatorGenerator;
-use thtmorais\test\unit\validators\NumberValidator as NumberValidatorGenerator;
-use thtmorais\test\unit\validators\StringValidator as StringValidatorGenerator;
-use thtmorais\test\unit\validators\UniqueValidator as UniqueValidatorGenerator;
-use thtmorais\test\unit\validators\BooleanValidator as BooleanValidatorGenerator;
-use thtmorais\test\unit\validators\CompareValidator as CompareValidatorGenerator;
-use thtmorais\test\unit\validators\RequiredValidator as RequiredValidatorGenerator;
-use thtmorais\test\unit\validators\DefaultValueValidator as DefaultValueValidatorGenerator;
-use thtmorais\test\unit\validators\RegularExpressionValidator as RegularExpressionValidatorGenerator;
+use thtmorais\test\unit\validators\IpValidatorGenerator;
+use thtmorais\test\unit\validators\UrlValidatorGenerator;
+use thtmorais\test\unit\validators\SafeValidatorGenerator;
+use thtmorais\test\unit\validators\FileValidatorGenerator;
+use thtmorais\test\unit\validators\DateValidatorGenerator;
+use thtmorais\test\unit\validators\EachValidatorGenerator;
+use thtmorais\test\unit\validators\EmailValidatorGenerator;
+use thtmorais\test\unit\validators\ExistValidatorGenerator;
+use thtmorais\test\unit\validators\ImageValidatorGenerator;
+use thtmorais\test\unit\validators\RangeValidatorGenerator;
+use thtmorais\test\unit\validators\FilterValidatorGenerator;
+use thtmorais\test\unit\validators\InlineValidatorGenerator;
+use thtmorais\test\unit\validators\NumberValidatorGenerator;
+use thtmorais\test\unit\validators\StringValidatorGenerator;
+use thtmorais\test\unit\validators\UniqueValidatorGenerator;
+use thtmorais\test\unit\validators\BooleanValidatorGenerator;
+use thtmorais\test\unit\validators\CompareValidatorGenerator;
+use thtmorais\test\unit\validators\RequiredValidatorGenerator;
+use thtmorais\test\unit\validators\DefaultValueValidatorGenerator;
+use thtmorais\test\unit\validators\RegularExpressionValidatorGenerator;
 
 /**
  * Class Generator
@@ -70,6 +70,11 @@ class Generator extends \yii\gii\Generator
      * @var string
      */
     public $namespace = 'app\tests\unit';
+
+    /**
+     * @var string
+     */
+    public $locale = 'en_US';
 
     /**
      * @var integer
@@ -95,7 +100,7 @@ class Generator extends \yii\gii\Generator
      */
     public function stickyAttributes()
     {
-        return ArrayHelper::merge(parent::stickyAttributes(), ['namespace', 'testQty']);
+        return ArrayHelper::merge(parent::stickyAttributes(), ['namespace', 'locale', 'testQty']);
     }
 
     public function attributeLabels()
@@ -134,7 +139,8 @@ class Generator extends \yii\gii\Generator
                 } catch (\Exception $e) {
                     $this->addError($attribute, "Class '$modelClass' does not exist or has syntax error.");
                 }
-            }, 'params' => ['extends' => BaseActiveRecord::className()]]
+            }, 'params' => ['extends' => BaseActiveRecord::className()]],
+            [['locale'], 'string']
         ]);
     }
 
@@ -146,6 +152,7 @@ class Generator extends \yii\gii\Generator
         $files = [];
 
         $name = $this->name;
+        $qty = $this->testQty;
 
         if (!StringHelper::endsWith($name,'Test',true)){
             $name = $name . 'Test';
@@ -164,8 +171,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => BooleanValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => BooleanValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => BooleanValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => BooleanValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -174,8 +181,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => CompareValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => CompareValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => CompareValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => CompareValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -184,8 +191,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => DateValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => DateValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => DateValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => DateValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -194,8 +201,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => DefaultValueValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => DefaultValueValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => DefaultValueValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => DefaultValueValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -204,8 +211,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => EachValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => EachValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => EachValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => EachValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -214,8 +221,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => EmailValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => EmailValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => EmailValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => EmailValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -224,8 +231,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => ExistValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => ExistValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => ExistValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => ExistValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -234,8 +241,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => FileValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => FileValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => FileValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => FileValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -244,8 +251,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => FilterValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => FilterValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => FilterValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => FilterValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -254,8 +261,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => ImageValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => ImageValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => ImageValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => ImageValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -264,8 +271,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => InlineValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => InlineValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => InlineValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => InlineValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -274,8 +281,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => IpValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => IpValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => IpValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => IpValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -284,8 +291,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => NumberValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => NumberValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => NumberValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => NumberValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -294,8 +301,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => RangeValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => RangeValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => RangeValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => RangeValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -304,8 +311,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => RegularExpressionValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => RegularExpressionValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => RegularExpressionValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => RegularExpressionValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -314,8 +321,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => RequiredValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => RequiredValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => RequiredValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => RequiredValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -324,8 +331,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => SafeValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => SafeValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => SafeValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => SafeValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -334,8 +341,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => StringValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => StringValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => StringValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => StringValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -344,8 +351,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => UniqueValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => UniqueValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => UniqueValidatorGenerator::assertTrue($qty, $validator, $attribute),
+                            'assertFalse' => UniqueValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
@@ -354,8 +361,8 @@ class Generator extends \yii\gii\Generator
                     foreach ($validator->attributes as $attribute) {
                         $tests[] = [
                             'attribute' => $attribute,
-                            'assertTrue' => UrlValidatorGenerator::assertTrue($this->testQty),
-                            'assertFalse' => UrlValidatorGenerator::assertFalse($this->testQty)
+                            'assertTrue' => UrlValidatorGenerator::assertTrue($qty, $validator, $attribute, $locale),
+                            'assertFalse' => UrlValidatorGenerator::assertFalse($qty, $validator, $attribute)
                         ];
                     }
 
