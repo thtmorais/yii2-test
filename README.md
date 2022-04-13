@@ -25,8 +25,17 @@ to the require section of your `composer.json` file.
 Usage
 -----
 
-Once the extension is installed, simply use it in your code by  :
+In your `config/web.php` and `config/console.php` set Gii modules:
 
 ```php
-<?= \thtmorais\test\AutoloadExample::widget(); ?>
+$config['modules']['gii'] = [
+    'class' => \yii\gii\Module::class,
+    'generators' => [
+        'unit-test' => [
+            'class' => \thtmorais\test\unit\Generator::class
+        ]
+    ],
+];
 ```
+
+Now you can access this modules in your Gii on new section: `Unit Test Generator`.
